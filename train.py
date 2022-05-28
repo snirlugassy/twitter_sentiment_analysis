@@ -70,18 +70,19 @@ if __name__ == '__main__':
             if len(tokens) == 0:
                 continue
 
-            tokens = tokens.to(device)
-            label = label.to(device)
+            tokens = tokens.to(device).unsqueeze(0)
+            label = label.to(device).unsqueeze(0)
 
             # Forward pass
             try:
-                y_prob = model(tokens)[-1]
+                output = model(tokens)
+                y_prob = output.squeeze()[-1]
+                L = loss(y_prob.view(1,-1), label.view(1,-1))
+                train_loss += L.item()
+                L.backward()
             except Exception as e:
                 print(i,tokens, label)
                 print(e)
-            L = loss(y_prob.view(1,-1), label.view(1,-1))
-            train_loss += L.item()
-            L.backward()
 
             if i & args.batch_size == 0:
                 # Batched Backpropagation

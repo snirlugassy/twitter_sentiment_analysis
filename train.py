@@ -1,3 +1,4 @@
+from datetime import datetime
 import os
 import csv
 import argparse
@@ -18,6 +19,7 @@ OPTIMIZERS = {
 if __name__ == '__main__':
     argparser = argparse.ArgumentParser(description='Train mask detection nerual network')
     argparser.add_argument('--data-path', type=str, required=True, dest='data_path')
+    argparser.add_argument('--model-name', type=str, default='model', dest='model_name')
     argparser.add_argument('--batch-size', type=int, dest='batch_size', default=64)
     argparser.add_argument('--epochs', type=int, dest='epochs', default=30)
     argparser.add_argument('--optimizer', type=str, dest='optimizer', choices=OPTIMIZERS.keys(), default='adam')
@@ -99,7 +101,8 @@ if __name__ == '__main__':
         print('---------------')
 
         print('-> Saving state')
-        torch.save(model.state_dict(), 'model.state')
+        t = datetime.now().strftime('%m_%d_%H_%M')
+        torch.save(model.state_dict(), 'f{args.model_name}_{t}.state')
 
     # print('Saving output CSV')
     # with open('output.csv', 'w') as csvfile:

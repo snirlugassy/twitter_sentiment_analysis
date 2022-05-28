@@ -59,6 +59,8 @@ if __name__ == '__main__':
     loss = torch.nn.CrossEntropyLoss()
     optimizer = OPTIMIZERS[args.optimizer](model.parameters(), lr=args.lr)
 
+    t = datetime.now().strftime('%m_%d_%H_%M')
+
     output = []
     for epoch in range(args.epochs):
         print(f"Epoch {epoch+1}/{args.epochs}\n---------------------------")
@@ -102,7 +104,6 @@ if __name__ == '__main__':
         print('---------------')
 
         print('-> Saving state')
-        t = datetime.now().strftime('%m_%d_%H_%M')
         torch.save(model.state_dict(), f'{args.model_name}_{t}.state')
 
     # print('Saving output CSV')

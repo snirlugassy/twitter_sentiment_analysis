@@ -5,7 +5,7 @@ import argparse
 import pickle
 import torch
 
-from model import SentimentLSTM
+from model import SentimentLSTM, SentimentGRU
 from dataset import SentimentAnalysisDataset
 from test import run_test
 
@@ -19,12 +19,12 @@ OPTIMIZERS = {
 if __name__ == '__main__':
     argparser = argparse.ArgumentParser(description='Train mask detection nerual network')
     argparser.add_argument('--data-path', type=str, required=True, dest='data_path')
-    argparser.add_argument('--model-name', type=str, default='model', dest='model_name')
-    argparser.add_argument('--batch-size', type=int, dest='batch_size', default=64)
+    argparser.add_argument('--model-name', type=str, dest='model_name', default='model')
+    argparser.add_argument('--batch-size', type=int, dest='batch_size', default=256)
     argparser.add_argument('--epochs', type=int, dest='epochs', default=30)
     argparser.add_argument('--optimizer', type=str, dest='optimizer', choices=OPTIMIZERS.keys(), default='adam')
     argparser.add_argument('--lr', type=float, dest='lr', default=1e-3)
-    argparser.add_argument('--print-steps', type=int, dest='print_steps', default=200)
+    argparser.add_argument('--print-steps', type=int, dest='print_steps', default=1000)
     args = argparser.parse_args()
 
     if args.optimizer not in OPTIMIZERS:
@@ -53,7 +53,7 @@ if __name__ == '__main__':
     test_size = len(test_dataset)
 
     print('-> Initalizing model')
-    model = SentimentLSTM(len(vocab))
+    model = SentimentGRU(len(vocab))
     model.to(device)
 
     loss = torch.nn.CrossEntropyLoss()

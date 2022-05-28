@@ -2,7 +2,7 @@ from unicodedata import bidirectional
 import torch
 
 class SentimentLSTM(torch.nn.Module):
-    def __init__(self, input_size, embedding_dim=300, hidden_dim=200, lstm_layers=2) -> None:
+    def __init__(self, input_size, embedding_dim=200, hidden_dim=200, lstm_layers=2) -> None:
         super(SentimentLSTM, self).__init__()
         self.input_size = input_size
         self.embedding_dim = embedding_dim
@@ -12,10 +12,10 @@ class SentimentLSTM(torch.nn.Module):
         self.embedding = torch.nn.Embedding(input_size, embedding_dim, padding_idx=0)
         self.lstm = torch.nn.LSTM(embedding_dim, hidden_dim, num_layers=lstm_layers, batch_first=True, bidirectional=True)
         self.fc = torch.nn.Sequential(
-            torch.nn.Linear(2*hidden_dim, 100),
+            torch.nn.Linear(2*hidden_dim, 200),
             torch.nn.ReLU(),
             torch.nn.Dropout(p=0.5),
-            torch.nn.Linear(100, 50),
+            torch.nn.Linear(200, 200),
             torch.nn.ReLU(),
             torch.nn.Linear(50,3)
         )
@@ -28,7 +28,7 @@ class SentimentLSTM(torch.nn.Module):
 
 
 class SentimentGRU(torch.nn.Module):
-    def __init__(self, input_size, embedding_dim=300, hidden_dim=200, gru_layers=2) -> None:
+    def __init__(self, input_size, embedding_dim=400, hidden_dim=300, gru_layers=4) -> None:
         super(SentimentGRU, self).__init__()
         self.input_size = input_size
         self.embedding_dim = embedding_dim
@@ -36,17 +36,20 @@ class SentimentGRU(torch.nn.Module):
         # Out-of-vocabulary words will be indexed with 0, therefore we use padding_idx
         # the embedding vector at padding_idx is not updated during training, i.e. it remains as a fixed “pad”
         self.embedding = torch.nn.Embedding(input_size, embedding_dim, padding_idx=0)
-        self.gru = torch.nn.GRU(embedding_dim, hidden_dim, num_layers=gru_layers, batch_first=True, bidirectional=True, dropout=0.2)
+        self.gru = torch.nn.GRU(embedding_dim, hidden_dim, num_layers=gru_layers, batch_first=True, bidirectional=True, dropout=0.3)
         self.fc = torch.nn.Sequential(
-            torch.nn.Linear(2*hidden_dim, 100),
+            torch.nn.Linear(int(gru_layers * hidden_dim), 256),
             torch.nn.ReLU(),
-            torch.nn.Dropout(p=0.3),
-            torch.nn.Linear(100, 100),
+            torch.nn.Dropout(p=0.42),
+            torch.nn.Linear(256, 128),
             torch.nn.ReLU(),
-            torch.nn.Dropout(p=0.3),
-            torch.nn.Linear(100, 50),
+            torch.nn.Dropout(p=0.42),
+            torch.nn.Linear(128, 128),
             torch.nn.ReLU(),
-            torch.nn.Linear(50,3)
+            torch.nn.Dropout(p=0.1),
+            torch.nn.Linear(128, 64),
+            torch.nn.ReLU(),
+            torch.nn.Linear(64,3)
         )
 
     def forward(self, tokens):

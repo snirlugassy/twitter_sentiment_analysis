@@ -13,7 +13,7 @@ if __name__ == '__main__':
 
     print('Building vocabulary')
     vocab = {}
-    next_idx = 0
+    next_idx = 1
     for text in data['clean']:
         for word in text:
             if word not in vocab.keys():

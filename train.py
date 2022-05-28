@@ -55,6 +55,7 @@ if __name__ == '__main__':
     print('-> Initalizing model')
     model = SentimentGRU(len(vocab))
     model.to(device)
+    print(f'Using model {model.__class__.__name__}')
 
     loss = torch.nn.CrossEntropyLoss()
     optimizer = OPTIMIZERS[args.optimizer](model.parameters(), lr=args.lr)

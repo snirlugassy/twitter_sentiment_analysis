@@ -53,7 +53,7 @@ if __name__ == '__main__':
     test_size = len(test_dataset)
 
     print('-> Initalizing model')
-    model = SentimentGRU(len(vocab))
+    model = SentimentGRU(len(vocab)+1)
     model.to(device)
     print(f'Using model {model.__class__.__name__}')
 

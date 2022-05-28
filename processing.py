@@ -1,11 +1,11 @@
 import re
-import nltk
 from nltk.stem import PorterStemmer
-from nltk.corpus import stopwords
 THREE_DOTS_TOKEN = '3NEKUDOT'
-STOPWORDS = stopwords.words('english')
 
 stemmer = PorterStemmer()
+
+with open('stopwords.txt', 'r') as f:
+    STOPWORDS = [x.strip() for x in f.readlines()]
 
 def text_processing(s:str):
     # remove tags

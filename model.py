@@ -14,6 +14,7 @@ class SentimentLSTM(torch.nn.Module):
         self.fc = torch.nn.Sequential(
             torch.nn.Linear(2*hidden_dim, 100),
             torch.nn.ReLU(),
+            torch.nn.Dropout(p=0.5),
             torch.nn.Linear(100, 50),
             torch.nn.ReLU(),
             torch.nn.Linear(50,3)

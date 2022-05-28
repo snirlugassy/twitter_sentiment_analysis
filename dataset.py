@@ -12,8 +12,14 @@ LABEL_MAP = {
 class SentimentAnalysisDataset(Dataset):
     def __init__(self, data_path:str, vocab: dict) -> None:
         self.data_path = data_path
+
+        # read texts
         self.df = pd.read_csv(data_path)
+        # shuffle rows
+        self.df = self.df.sample(frac=1).reset_index(drop=True)
+        # text processing
         self.df['clean'] = self.df['content'].apply(text_processing)
+
         self.vocab = vocab
         self.vocab_length = len(vocab)
 

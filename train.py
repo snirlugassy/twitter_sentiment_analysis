@@ -76,7 +76,7 @@ if __name__ == '__main__':
             # Forward pass
             try:
                 output = model(tokens)
-                y_prob = output.squeeze()[-1]
+                y_prob = output.squeeze(0)[-1]
                 L = loss(y_prob.view(1,-1), label.view(1,-1))
                 train_loss += L.item()
                 L.backward()
@@ -103,7 +103,7 @@ if __name__ == '__main__':
 
         print('-> Saving state')
         t = datetime.now().strftime('%m_%d_%H_%M')
-        torch.save(model.state_dict(), 'f{args.model_name}_{t}.state')
+        torch.save(model.state_dict(), f'{args.model_name}_{t}.state')
 
     # print('Saving output CSV')
     # with open('output.csv', 'w') as csvfile:

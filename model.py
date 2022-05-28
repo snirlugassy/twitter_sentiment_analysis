@@ -38,7 +38,7 @@ class SentimentGRU(torch.nn.Module):
         self.embedding = torch.nn.Embedding(input_size, embedding_dim, padding_idx=0)
         self.gru = torch.nn.GRU(embedding_dim, hidden_dim, num_layers=gru_layers, batch_first=True, bidirectional=True, dropout=0.3)
         self.fc = torch.nn.Sequential(
-            torch.nn.Linear(int(gru_layers * hidden_dim), 256),
+            torch.nn.Linear(2 * hidden_dim, 256),
             torch.nn.ReLU(),
             torch.nn.Dropout(p=0.42),
             torch.nn.Linear(256, 128),

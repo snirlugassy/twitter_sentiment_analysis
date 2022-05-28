@@ -42,7 +42,7 @@ if __name__ == '__main__':
     print('====================')
 
     print('-> Loading vocabulary')
-    with open('vocab.text', 'rb') as pkl:
+    with open('vocab.dict', 'rb') as pkl:
         vocab = pickle.load(pkl)
 
     print('-> Loading datasets')

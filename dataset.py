@@ -1,5 +1,4 @@
 import torch
-from torchtext import vocab
 import pandas as pd
 from torch.utils.data import Dataset
 from processing import text_processing
@@ -11,7 +10,7 @@ LABEL_MAP = {
 }
 
 class SentimentAnalysisDataset(Dataset):
-    def __init__(self, data_path:str, vocab: vocab.Vocab) -> None:
+    def __init__(self, data_path:str, vocab: dict) -> None:
         self.data_path = data_path
         self.df = pd.read_csv(data_path)
         self.df['clean'] = self.df['content'].apply(text_processing)

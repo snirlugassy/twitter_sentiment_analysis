@@ -1,7 +1,6 @@
 
 import pickle
 import pandas as pd
-from torchtext import vocab
 from processing import text_processing
 
 
@@ -13,8 +12,14 @@ if __name__ == '_main__':
     data['clean'] = data['content'].apply(text_processing)
 
     print('Building vocabulary')
-    voc = vocab.build_vocab_from_iterator(data['clean'], min_freq=1)
+    vocab = {}
+    next_idx = 0
+    for text in data['clean']:
+        for word in text.split(' '):
+            if word not in vocab.keys():
+                vocab[word] = next_idx
+                next_idx += 1
 
     print('Saving to file')
     with open('vocab.text', 'wb') as pkl:
-        pickle.dump(voc, pkl) 
+        pickle.dump(vocab, pkl) 

@@ -5,7 +5,7 @@ import argparse
 import pickle
 import torch
 
-from model import SentimentLSTM, SentimentGRU
+from model import SentimentLSTM, SentimentGRU, SentimentGRUWithGlove
 from dataset import SentimentAnalysisDataset
 from test import run_test
 
@@ -41,20 +41,21 @@ if __name__ == '__main__':
     print('device:', device)
     print('====================')
 
-    print('-> Loading vocabulary')
-    with open('vocab.dict', 'rb') as pkl:
-        vocab = pickle.load(pkl)
+    # print('-> Loading vocabulary')
+    # with open('vocab.dict', 'rb') as pkl:
+    #     vocab = pickle.load(pkl)
 
     print('-> Loading datasets')
-    train_dataset = SentimentAnalysisDataset(os.path.join(data_path, 'trainEmotions.csv'), vocab)
+    train_dataset = SentimentAnalysisDataset(os.path.join(data_path, 'trainEmotions.csv'))
     train_size = len(train_dataset)
 
-    test_dataset = SentimentAnalysisDataset(os.path.join(data_path, 'testEmotions.csv'), vocab)
+    test_dataset = SentimentAnalysisDataset(os.path.join(data_path, 'testEmotions.csv'))
     test_size = len(test_dataset)
 
     print('-> Initalizing model')
-    model = SentimentGRU(len(vocab)+1)
+    model = SentimentGRUWithGlove(input_size=100)
     model.to(device)
+    model = model.double()
     print(f'Using model {model.__class__.__name__}')
 
     loss = torch.nn.CrossEntropyLoss()

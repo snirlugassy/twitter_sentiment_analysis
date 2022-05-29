@@ -1,4 +1,5 @@
 cc.en.300.bin*
+glove.6B.*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

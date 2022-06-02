@@ -63,7 +63,8 @@ if __name__ == '__main__':
 
     t = datetime.now().strftime('%m_%d_%H_%M')
 
-    output = []
+    results = []
+    max_test_acc = 0
     for epoch in range(args.epochs):
         print(f"Epoch {epoch+1}/{args.epochs}\n---------------------------")
 
@@ -99,18 +100,25 @@ if __name__ == '__main__':
         print(f'Epoch Loss: {train_loss / train_size}\n------------------')
 
         print('-> Running test')
-        f1, acc, conf_mat, test_loss = run_test(model, test_dataset, loss, device)
-        print('F1-Score:', f1)
-        print('Accuracy:', acc)
+        test_acc, _, test_loss = run_test(model, test_dataset, loss, device)
+        print('Accuracy:', test_acc)
         print('Loss:', test_loss)
         print('---------------')
 
-        print('-> Saving state')
-        torch.save(model.state_dict(), f'{args.model_name}_{t}.state')
+        if test_acc > max_test_acc:    
+            print('-> Saving state')
+            torch.save(model.state_dict(), f'{args.model_name}_{t}.state')
 
-    # print('Saving output CSV')
-    # with open('output.csv', 'w') as csvfile:
-    #     writer = csv.DictWriter(csvfile, fieldnames=list(output[0].keys()))
-    #     writer.writeheader()
-    #     for x in output:
-    #         writer.writerow(x)
+        results.append({
+            'epoch': epoch,
+            'train_loss': train_loss / train_size,
+            'test_accuracy': test_acc,
+            'test_loss': test_loss,
+        })
+
+    print('Saving results CSV')
+    with open(f'results_{args.model_name}_{t}.csv', 'w') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=list(results[0].keys()))
+        writer.writeheader()
+        for result in results:
+            writer.writerow(result)

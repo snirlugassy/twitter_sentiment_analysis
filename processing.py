@@ -13,7 +13,7 @@ def text_processing(s:str):
     # add space to ! or ?
     s = re.sub('[!]', ' ! ', s)
     s = re.sub('[?]', ' ? ', s)
-    # replace 3+ docs with special token
+    # replace 3+ dots with special token
     s = re.sub(r'\.{3,}', ' ' + THREE_DOTS_TOKEN + ' ', s)
     # remove URL
     s = re.sub(r'(?:(?:https?|ftp):\/\/)?[\w\/\-?=%.]+\.[\w\/\-&?=%.]+', ' ', s)

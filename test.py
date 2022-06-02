@@ -1,7 +1,7 @@
 import torch
 import numpy as np
 from dataset import LABEL_MAP
-from sklearn.metrics import f1_score, accuracy_score, confusion_matrix
+from sklearn.metrics import accuracy_score, confusion_matrix
 
 def run_test(model, dataset, loss_func, device):
 
@@ -32,4 +32,4 @@ def run_test(model, dataset, loss_func, device):
     y_true = np.array(y_true)
     y_predict = np.array(y_predict)
 
-    return f1_score(y_true, y_predict, average='micro'), accuracy_score(y_true, y_predict), confusion_matrix(y_true, y_predict), test_loss
+    return accuracy_score(y_true, y_predict), confusion_matrix(y_true, y_predict), test_loss

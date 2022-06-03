@@ -156,7 +156,7 @@ for epoch in range(args['epochs']):
         if len(tokens) == 0:
             continue
 
-        tokens = tokens.to(device)
+        tokens = tokens.to(device).float()
         label = label.to(device)
 
         # Forward pass

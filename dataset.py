@@ -56,7 +56,11 @@ class SentimentAnalysisDataset(Dataset):
                 tokens.append(torch.from_numpy(self.embedding[t]))
             else:
                 tokens.append(torch.zeros(self.embedding_dim))
-        tokens = torch.stack(tokens)
+        
+        if len(tokens) > 0:
+            tokens = torch.stack(tokens)
+        else:
+            tokens = torch.Tensor()
         self.cache_vecs[idx] = tokens
         return tokens
         

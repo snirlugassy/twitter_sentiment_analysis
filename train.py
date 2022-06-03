@@ -5,7 +5,7 @@ import argparse
 import pickle
 import torch
 
-from model import SentimentLSTM, SentimentGRU, SentimentGRUWithGlove
+from model import TransformerModel, SentimentGRUWithGlove
 from dataset import SentimentAnalysisDataset
 from test import run_test
 
@@ -76,13 +76,12 @@ if __name__ == '__main__':
                 continue
 
             tokens = tokens.to(device).unsqueeze(0)
-            label = label.to(device).unsqueeze(0)
+            label = label.to(device)
 
             # Forward pass
             try:
                 output = model(tokens)
-                y_prob = output.squeeze(0)[-1]
-                L = loss(y_prob.view(1,-1), label.view(1,-1))
+                L = loss(output.view(1,-1), label.view(1,-1))
                 train_loss += L.item()
                 L.backward()
             except Exception as e:

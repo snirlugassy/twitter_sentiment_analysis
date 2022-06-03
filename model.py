@@ -85,7 +85,7 @@ class SentimentGRUWithGlove(torch.nn.Module):
     def forward(self, x):
         x,_ = self.gru(x)
         x = self.fc(x)
-        return x
+        return x.squeeze()[-1]
 
 class SentimentMultiHeadAttention(torch.nn.Module):
     def __init__(self, input_size, embedding_dim=300, hidden_dim=200, num_heads=3, attention_drouput=0.3) -> None:
@@ -109,5 +109,27 @@ class SentimentMultiHeadAttention(torch.nn.Module):
     def forward(self, tokens):
         x = self.embedding(tokens)
         x,_ = self.gru(x)
+        x = self.fc(x)
+        return x
+
+
+class TransformerModel(torch.nn.Module):
+    def __init__(self, input_size=100, embedding_dim=200) -> None:
+        super(TransformerModel, self).__init__()
+        self.input_size = input_size
+        encoder_layer = torch.nn.TransformerEncoderLayer(d_model=input_size, nhead=5, batch_first=True)
+        self.tranformer = torch.nn.TransformerEncoder(encoder_layer, num_layers=2)
+        self.fc = torch.nn.Sequential(
+            torch.nn.Linear(input_size, 100),
+            torch.nn.ReLU(),
+            torch.nn.Dropout(p=0.33),
+            torch.nn.Linear(100, 50),
+            torch.nn.ReLU(),
+            torch.nn.Linear(50,3)
+        )
+
+    def forward(self, x):
+        x = self.tranformer(x).squeeze()
+        x = x.mean(dim=0)
         x = self.fc(x)
         return x

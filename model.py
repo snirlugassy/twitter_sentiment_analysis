@@ -1,4 +1,3 @@
-from unicodedata import bidirectional
 import torch
 
 class SentimentLSTM(torch.nn.Module):
@@ -85,7 +84,7 @@ class SentimentGRUWithGlove(torch.nn.Module):
     def forward(self, x):
         x,_ = self.gru(x)
         x = self.fc(x)
-        return x.squeeze()[-1]
+        return x.squeeze(0)[-1]
 
 class SentimentMultiHeadAttention(torch.nn.Module):
     def __init__(self, input_size, embedding_dim=300, hidden_dim=200, num_heads=3, attention_drouput=0.3) -> None:

@@ -58,10 +58,10 @@ args = {
     'data_path': 'data',
     'model_name': 'transformer_classifier_C',
     'batch_size': 256,
-    'epochs': 30,
+    'epochs': 100,
     'optimizer': 'adam',
     'lr': 1e-3,
-    'print_steps': 1000
+    'print_steps': 2000
 }
 
 print('====== TRAIN =======')

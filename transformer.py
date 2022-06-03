@@ -64,6 +64,10 @@ args = {
     'print_steps': 1000
 }
 
+print('====== TRAIN =======')
+print(args)
+print('====================')
+
 data_path = args['data_path']
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -197,7 +201,7 @@ for epoch in range(args['epochs']):
 
 
 print('Saving results CSV')
-with open(f'results_{args['model_name']}_{t}.csv', 'w') as csvfile:
+with open(f'results_{args["model_name"]}_{t}.csv', 'w') as csvfile:
     writer = csv.DictWriter(csvfile, fieldnames=list(results[0].keys()))
     writer.writeheader()
     for result in results:

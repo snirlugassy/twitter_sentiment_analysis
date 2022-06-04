@@ -22,8 +22,10 @@ def run_test(model, dataset, loss_func, device):
     model.eval()
     with torch.no_grad():
         for tokens, label in dataset:
-            tokens = tokens.to(device).unsqueeze(0)
+            
+            tokens = tokens.to(device).float()
             label = label.to(device)
+
             y_true.append(int(label.argmax()))
 
             if tokens.squeeze().dim() == 0 or len(tokens.squeeze()) == 0:
@@ -34,15 +36,15 @@ def run_test(model, dataset, loss_func, device):
 
             # Forward pass
             output = model(tokens)
-            y_prob = output.squeeze(0)
-            y_predict.append(int(torch.softmax(y_prob, dim=0).argmax(dim=0)))
-            L = loss_func(y_prob.view(1,-1), label.view(1,-1))
+            y_predict.append(int(torch.softmax(output, dim=0).argmax()))
+            L = loss_func(output.view(1,-1), label.view(1,-1))
             test_loss += L.item()
 
     y_true = np.array(y_true)
     y_predict = np.array(y_predict)
 
     return accuracy_score(y_true, y_predict), confusion_matrix(y_true, y_predict), test_loss
+
 
 if __name__ == '__main__':
     argparser = argparse.ArgumentParser(description='Test mask detection nerual network')

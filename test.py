@@ -10,7 +10,8 @@ from dataset import SentimentAnalysisDataset
 import argparse
 import torch
 
-from model import TransformerModel, SentimentGRUWithGlove
+from model import SentimentGRUWithGlove
+from transformer import TransformerModel
 from dataset import SentimentAnalysisDataset
 
 def run_test(model, dataset, loss_func, device):
@@ -68,6 +69,6 @@ if __name__ == '__main__':
 
     loss = torch.nn.CrossEntropyLoss()
 
-    acc, conf_mat = run_test(model, test_dataset, loss, device)
+    acc, conf_mat, _ = run_test(model, test_dataset, loss, device)
     print('accuracy:', acc)
     print('confusion matrix:', conf_mat)

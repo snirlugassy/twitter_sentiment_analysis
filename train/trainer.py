@@ -119,7 +119,7 @@ if __name__ == '__main__':
 
         if test_acc > max_test_acc:    
             print('-> Saving state')
-            torch.save(model.state_dict(), f'models/{args.model_name.upper()}_{t}.state')
+            torch.save(model.state_dict(), f'models/{args.model.upper()}_{t}.state')
 
         results.append({
             'epoch': epoch,
@@ -129,7 +129,7 @@ if __name__ == '__main__':
         })
 
     print('Saving results CSV')
-    with open(f'results/{args.model_name.upper()}_{t}.csv', 'w') as csvfile:
+    with open(f'results/{args.model.upper()}_{t}.csv', 'w') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=list(results[0].keys()))
         writer.writeheader()
         for result in results:
